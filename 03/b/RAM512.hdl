@@ -1,7 +1,28 @@
-// This file is part of the materials accompanying the book 
-// "The Elements of Computing Systems" by Nisan and Schocken, 
-// MIT Press. Book site: www.idc.ac.il/tecs
-// File name: projects/03/b/RAM512.hdl
+//RAM512
+CHIP RAM512 
+{
+
+ IN in[16], load, address[9];
+ OUT out[16];
+
+PARTS:
+
+DMux8Way(in=load,sel=address[6..8],a=k1,b=k2,c=k3,d=k4,e=k5,f=k6,g=k7,h=k8);
+
+RAM64(in=in,load=k1,address=address[0..5],out=c1);
+RAM64(in=in,load=k2,address=address[0..5],out=c2);
+RAM64(in=in,load=k3,address=address[0..5],out=c3);
+RAM64(in=in,load=k4,address=address[0..5],out=c4);
+RAM64(in=in,load=k5,address=address[0..5],out=c5);
+RAM64(in=in,load=k6,address=address[0..5],out=c6);
+RAM64(in=in,load=k7,address=address[0..5],out=c7);
+RAM64(in=in,load=k8,address=address[0..5],out=c8);
+
+Mux8Way16(a=c1,b=c2,c=c3,d=c4,e=c5,f=c6,g=c7,h=c8,sel=address[6..8],out=out);
+
+}
+
+// Notes:
 
 /**
  * Memory of 512 registers, each 16 bit-wide. Out holds the value
@@ -9,11 +30,3 @@
  * the in value is loaded into the memory location specified by address 
  * (the loaded value will be emitted to out from the next time step onward).
  */
-
-CHIP RAM512 {
-    IN in[16], load, address[9];
-    OUT out[16];
-
-    PARTS:
-    // Put your code here:
-}
