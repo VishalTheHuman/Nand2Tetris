@@ -1,0 +1,19 @@
+// Bit
+CHIP Bit 
+{
+IN in, load;
+OUT out;
+
+PARTS:
+Mux(a=dffo,b=in,sel=load,out=a1);
+DFF(in=a1,out=dffo,out=out);
+}
+
+//Notes
+
+/**
+ * 1-bit register:
+ * If load[t] == 1 then out[t+1] = in[t]
+ *                 else out does not change (out[t+1] = out[t])
+ */
+

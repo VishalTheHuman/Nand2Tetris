@@ -1,0 +1,18 @@
+CHIP Mux4Way
+{
+IN d0,d1,d2,d3,sel0,sel1;
+OUT out;
+
+PARTS:
+// Complement of the Select Line
+Not(in=sel0,out=nsel0);
+Not(in=sel1,out=nsel1);
+// 
+And3(a=nsel1,b=nsel0,c=d0,out=l1);
+And3(a=nsel1,b=sel0,c=d1,out=l2);
+And3(a=sel1,b=nsel0,c=d2,out=l3);
+And3(a=sel1,b=sel0,c=d3,out=l4);
+// f
+Or4(a=l1,b=l2,c=l3,d=l4,out=out);
+}
+

@@ -1,0 +1,16 @@
+// Xnor
+
+CHIP Xnor 
+{
+IN a, b;
+OUT out;
+
+PARTS:
+
+Nand(a=a,b=b,out=k1);
+Nand(a=a,b=k1,out=r1);
+Nand(a=b,b=k1,out=r2);
+Nand(a=r1,b=r2,out=p1);
+Nand(a=p1,b=p1,out=out);
+
+}
