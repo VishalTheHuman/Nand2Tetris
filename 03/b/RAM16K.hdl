@@ -16,7 +16,7 @@ RAM4K(in=in,load=k3,address=address[0..11],out=c3);
 RAM4K(in=in,load=k4,address=address[0..11],out=c4);
 
 
-Mux4Way16(a=c1,b=c2,c=c3,d=c4.sel=address[12..13],out=out);
+Mux4Way16(a=c1,b=c2,c=c3,d=c4,sel=address[12..13],out=out);
 
 }
 

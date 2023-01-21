@@ -1,7 +1,65 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/05/CPU.hdl
+////////////
+Still Building
+////////////
+
+CHIP CPU {
+
+ IN  inM[16],         // M value input  (M = contents of RAM[A])
+instruction[16], // Instruction for execution
+reset;           // Signals whether to re-start the current
+// program (reset==1) or continue executing
+// the current program (reset==0).
+
+OUT outM[16],        // M value output
+writeM,          // Write to M? 
+addressM[15],    // Address in data memory (of M)
+pc[15];          // address of next instruction
+
+PARTS:
+
+Not(in=instruction[15],out=nOpCode);
+Mux16(a=aluoutput,b=instruction,sel=nOpCode,out=A1);
+
+// A Register
+Or(a=nOpCode,b=instruction[5],out=loadA);
+Register(in=A1,load=loadA,out=AReg,out[0..14]=addressM);
+
+// D Register Input 1
+And(a=instruction[15],b=instruction[4],out=Dload);
+Register(in=aluoutput,load=Dload,out=DReg);
+
+// ALU Input 2
+And(a=instruction[15], b=instruction[12], out=AMSwitch);
+Mux16(a=AReg,b=inM,sel=AMSwitch,out=ALUin2);
+
+// ALU
+ALU(x=DReg,y=ALUin2,
+          zx=instruction[11], nx=instruction[10],
+          zy=instruction[9], ny=instruction[8],
+          f=instruction[7], no=instruction[6],
+          out=aluoutput,out=outM,zr=zr,ng=ng);
+
+// Writing Memory
+ Not(in=ng, out=pos);
+ Not(in=zr, out=nzr);
+ And(a=instruction[15], b=instruction[0], out=jgt);
+ And(a=pos, b=nzr, out=posnzr);
+ And(a=jgt, b=posnzr, out=ld1);
+
+ And(a=instruction[15], b=instruction[1], out=jeq);
+ And(a=jeq, b=zr, out=ld2);
+
+And(a=instruction[15], b=instruction[2], out=jlt);
+And(a=jlt, b=ng, out=ld3);
+
+Or(a=ld1, b=ld2, out=ldt);
+Or(a=ld3, b=ldt, out=ld);
+
+PC(in=AReg, load=ld, inc=true, reset=reset, out[0..14]=pc);
+
+}
+
+// Notes:
 
 /**
  * The Hack CPU (Central Processing unit), consisting of an ALU,
@@ -24,20 +82,3 @@
  * CPU jumps to address 0 (i.e. pc is set to 0 in next time step) rather 
  * than to the address resulting from executing the current instruction. 
  */
-
-CHIP CPU {
-
-    IN  inM[16],         // M value input  (M = contents of RAM[A])
-        instruction[16], // Instruction for execution
-        reset;           // Signals whether to re-start the current
-                         // program (reset==1) or continue executing
-                         // the current program (reset==0).
-
-    OUT outM[16],        // M value output
-        writeM,          // Write to M? 
-        addressM[15],    // Address in data memory (of M)
-        pc[15];          // address of next instruction
-
-    PARTS:
-    // Put your code here:
-}

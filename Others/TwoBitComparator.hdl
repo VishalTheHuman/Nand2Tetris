@@ -1,0 +1,73 @@
+CHIP TwoBitComparator
+{
+IN a0,a1,b0,b1;
+OUT GT,LT,EQ;
+
+PARTS:
+Not(in=a0,out=na0); // A0'
+Not(in=a1,out=na1); // A1'
+Not(in=b0,out=nb0); // B0'
+Not(in=b1,out=nb1); // B1'
+//........................................................................
+// Greater Than
+
+// T1=A0.A1.B1'
+And(a=a0,b=a1,out=t1a);
+And(a=t1a,b=nb1,out=t1);
+
+// T2=A1.B0'.B1'
+And(a=a1,b=nb0,out=t2a);
+And(a=t2a,b=nb1,out=t2);
+
+// T3=A0.B0'
+And(a=a0,b=nb0,out=t3);
+
+// GT = T1 + T2 + T3
+Or(a=t1,b=t2,out=h1);
+Or(a=h1,b=t3,out=GT);
+//.........................................................................
+// Less Than
+
+// W1=A1'.B0.B1
+And(a=na1,b=b0,out=w1a);
+And(a=w1a,b=b1,out=w1);
+
+// W2=A0'.A1'.B1
+And(a=na0,b=na1,out=w2a);
+And(a=w2a,b=b1,out=w2);
+
+// W3=A0'.B0
+And(a=na0,b=b0,out=w3);
+
+// LT = W1 + W2 + W3
+Or(a=w1,b=w2,out=c1);
+Or(a=c1,b=w3,out=LT);
+//..........................................................................
+// Equal 
+
+//Q1=A0'.A1'.B0'.B1'
+And(a=na0,b=na1,out=v1);
+And(a=v1,b=nb0,out=v2);
+And(a=v2,b=nb1,out=q1);
+
+//Q2=A0'.A1.B0'.B1
+And(a=na0,b=a1,out=e1);
+And(a=e1,b=nb0,out=e2);
+And(a=e2,b=b1,out=q2);
+
+//Q3=A0.A1'.B0.B1'
+And(a=a0,b=na1,out=u1);
+And(a=u1,b=b0,out=u2);
+And(a=u2,b=nb1,out=q3);
+
+//Q4=A0.A1.B0.B1
+And(a=a0,b=a1,out=z1);
+And(a=z1,b=b0,out=z2);
+And(a=z2,b=b1,out=q4);
+
+// EQ = Q1 + Q2 + Q3 + Q4
+Or(a=q1,b=q2,out=y1);
+Or(a=y1,b=q3,out=y2);
+Or(a=y2,b=q4,out=EQ);
+
+}

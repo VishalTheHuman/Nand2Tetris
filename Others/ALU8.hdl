@@ -1,0 +1,37 @@
+// ALU8
+CHIP ALU8 {
+    IN  
+        x[8], y[8],  // 8-bit inputs        
+        zx, // zero the x input?
+        nx, // negate the x input?
+        zy, // zero the y input?
+        ny, // negate the y input?
+        f,  // compute out = x + y (if 1) or x & y (if 0)
+        no; // negate the out output?
+    OUT 
+        out[8], // 8-bit output
+        zr, // 1 if (out == 0), 0 otherwise
+        ng; // 1 if (out < 0),  0 otherwise
+    PARTS:
+    Mux8(a=x,b=false,sel=zx,out=o1);
+    Not8(in=o1,out=o2);
+    Mux8(a=o1,b=o2,sel=nx,out=o3);
+
+
+    Mux8(a=y,b=false,sel=zy,out=o4);
+    Not8(in=o4,out=o5);
+    Mux8(a=o4,b=o5,sel=ny,out=o6);
+
+    And8(a=o3,b=o6,out=o7);
+    Add8(a=o3,b=o6,out=o8);
+ 
+    Mux8(a=o7,b=o8,sel=f,out=o9);
+
+    Not8(in=o9,out=o10);
+    Mux8(a=o9,b=o10,sel=no,out=out,out[0..3]=to1,out[4..7]=to2,out[7]=ng);
+
+    Or4Way(in=to1,out=to3);
+    Or4Way(in=to2,out=to4);
+    Or(a=to3,b=to4,out=to5);
+    Not(in=to5,out=zr);
+}

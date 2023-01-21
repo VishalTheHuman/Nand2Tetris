@@ -1,0 +1,79 @@
+CHIP SevenSegmentDecoder
+{
+IN A,B,C,D;
+OUT a,b,c,d,e,f,g;
+
+PARTS:
+Not(in=A,out=nA); // A'
+Not(in=B,out=nB); // B'
+Not(in=C,out=nC); // C'
+Not(in=D,out=nD); // D'
+//...........................................................
+//a = A + C + B.D + B'.D'
+
+And(a=B,b=D,out=a1); // BD
+And(a=nB,b=nD,out=a2); // B'.D'
+Or(a=A,b=C,out=b1);
+Or(a=b1,b=a1,out=b2);
+Or(a=b2,b=a2,out=a);
+
+//...........................................................
+//b = B' + C'.D' + CD
+
+And(a=nC,b=nD,out=c1); // C'.D'
+And(a=C,b=D,out=c2); // C.D
+Or(a=nB,b=c1,out=d1);
+Or(a=d1,b=c2,out=b);
+
+//...........................................................
+// c = B + C' +D
+
+Or(a=B,b=nC,out=e1);
+Or(a=e1,b=D,out=c);
+
+//...........................................................
+// d = B'.D' + C.D' + B.C'.D + B'.C + A
+
+And(a=nB,b=nD,out=f1); // B'.D' 
+And(a=C,b=nD,out=f2); // C.D'
+And(a=B,b=nC,out=f3a); 
+And(a=f3a,b=D,out=f3); // B.C'.D
+And(a=nB,b=C,out=f4); // B'.C
+
+Or(a=f1,b=f2,out=g1);
+Or(a=g1,b=f3,out=g2);
+Or(a=g2,b=f4,out=g3);
+Or(a=g3,b=A,out=d);
+
+//...........................................................
+//  e = B'.D' + C.D'
+
+And(a=nB,b=nD,out=h1); // B'.D'
+And(a=C,b=nD,out=h2); // C.D'
+
+Or(a=h1,b=h2,out=e);
+
+//...........................................................
+// f = A + C'.D' + B.C' + B.D'
+
+And(a=nC,b=nD,out=i1); // C'.D' 
+And(a=B,b=nC,out=i2); // B.C'
+And(a=B,b=nD,out=i3); // B.D'
+
+Or(a=A,b=i1,out=i4);
+Or(a=i4,b=i2,out=i5);
+Or(a=i5,b=i3,out=f);
+
+//...........................................................
+// g = B'.C + B.D' + B.C' + A
+
+And(a=nB,b=C,out=j1); // B'.C
+And(a=B,b=nD,out=j2); // B.D'
+And(a=B,b=nC,out=j3); // B.C'
+
+Or(a=j1,b=j2,out=j5);
+Or(a=j5,b=j3,out=j6);
+Or(a=j6,b=A,out=g);
+//...........................................................
+}
+

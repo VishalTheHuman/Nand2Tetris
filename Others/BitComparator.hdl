@@ -1,0 +1,15 @@
+CHIP BitComparator
+{
+IN a,b;
+OUT GT,EQ,LT;
+
+PARTS:
+Not(in=a,out=na); // a
+Not(in=b,out=nb); // b
+// Greater Than
+And(a=a,b=nb,out=GT);
+// Less Than
+And(a=na,b=b,out=LT);
+// Equal
+Xnor(a=a,b=b,out=EQ);
+}
