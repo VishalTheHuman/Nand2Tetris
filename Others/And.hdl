@@ -1,0 +1,9 @@
+CHIP And
+{
+IN a,b;
+OUT out;
+
+PARTS:
+Nand(a=a,b=b,out=k1);
+Nand(a=k1,b=k1,out=out);
+}

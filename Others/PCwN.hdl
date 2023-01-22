@@ -1,4 +1,4 @@
-CHIP PC {
+CHIP PCwN {
 IN in[16],load,inc,reset;
 OUT out[16];
 PARTS:
@@ -18,10 +18,10 @@ Nand(a=e1a1,b=e2a1,out=increment1);
 Nand(a=k1a1,b=k1a1,out=c1);
 //............................................................................
 // HalfAdder 2
-Nand(a=eo2,b=c2,out=k1a2);
+Nand(a=eo2,b=c1,out=k1a2);
 Nand(a=eo2,b=k1a2,out=e1a2);
 Nand(a=true,b=k1a2,out=e2a2);
-Nand(a=e1a2,b=e2a1,out=increment2);
+Nand(a=e1a2,b=e2a2,out=increment2);
 Nand(a=k1a2,b=k1a2,out=c2);
 //............................................................................
 // HalfAdder 3
@@ -89,7 +89,7 @@ Nand(a=k1a11,b=k1a11,out=c11);
 //............................................................................
 // HalfAdder 12
 Nand(a=eo12,b=c11,out=k1a12);
-Nand(a=eo1,b=k1a12,out=e1a12);
+Nand(a=eo12,b=k1a12,out=e1a12);
 Nand(a=true,b=k1a12,out=e2a12);
 Nand(a=e1a12,b=e2a12,out=increment12);
 Nand(a=k1a12,b=k1a12,out=c12);
@@ -110,7 +110,7 @@ Nand(a=k1a14,b=k1a14,out=c14);
 //............................................................................
 // HalfAdder 15
 Nand(a=eo15,b=c14,out=k1a15);
-Nand(a=eo15,b=k1a0,out=e1a15);
+Nand(a=eo15,b=k1a15,out=e1a15);
 Nand(a=true,b=k1a15,out=e2a15);
 Nand(a=e1a15,b=e2a15,out=increment15);
 Nand(a=k1a15,b=k1a15,out=c15);
@@ -202,10 +202,9 @@ Nand(a=inc,b=increment15,out=o2a15);
 Nand(a=o1a15,b=o2a15,out=k115);
 //............................................................................
 
-
 // Load
 // Mux16(a=k1,b=in,sel=load,out=k2);
-Nand(a=nload,b=load,out=nload);
+Nand(a=load,b=load,out=nload);
 
 //*Mux0
 Nand(a=nload,b=k10,out=q1a0);

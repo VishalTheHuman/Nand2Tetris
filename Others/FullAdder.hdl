@@ -1,0 +1,17 @@
+CHIP FullAdder
+{
+IN a,b,c;
+OUT sum,carry;
+
+PARTS:
+
+Nand(a=a,b=b,out=k1);
+Nand(a=a,b=k1,out=s1);
+Nand(a=b,b=k1,out=s2);
+Nand(a=s1,b=s2,out=j1);
+Nand(a=j1,b=c,out=y1);
+Nand(a=y1,b=j1,out=s3);
+Nand(a=c,b=y1,out=s4);
+Nand(a=s3,b=s4,out=sum);
+Nand(a=k1,b=y1,out=carry);
+}

@@ -1,0 +1,13 @@
+CHIP HalfAdder
+{
+IN a,b;
+OUT sum,carry;
+
+PARTS:
+Nand(a=a,b=b,out=k1);
+Nand(a=a,b=k1,out=e1);
+Nand(a=b,b=k1,out=e2);
+Nand(a=e1,b=e2,out=sum);
+Nand(a=k1,b=k1,out=carry);
+
+}
